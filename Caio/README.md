@@ -21,6 +21,8 @@ Este projeto implementa testes automatizados para a API ServeRest utilizando Rob
 
 **Total: 7 casos de teste implementados e funcionando**
 
+> ⚠️ **ATENÇÃO:** Se os testes falharem, consulte a seção "Troubleshooting" no final deste documento.
+
 ## 🚀 Como Executar
 
 ### Pré-requisitos
@@ -142,10 +144,50 @@ Após a execução, os relatórios são gerados na pasta `reports/`:
 - Tempo de execução: ~30 segundos
 - Relatórios disponíveis em: `reports/report.html`
 
-## 👥 Autor
+## � Troubleshooting
+
+### Se os testes falharem com erro 401:
+
+A API ServeRest pode resetar dados. Execute estes comandos para recriar os usuários:
+
+```powershell
+# Criar usuários necessários
+Invoke-WebRequest -Uri "https://serverest.dev/usuarios" -Method POST -ContentType "application/json" -Body '{"nome": "Admin User", "email": "admin@serverest.dev", "password": "123456", "administrador": "true"}'
+
+Invoke-WebRequest -Uri "https://serverest.dev/usuarios" -Method POST -ContentType "application/json" -Body '{"nome": "Fulano da Silva", "email": "fulano@serverest.dev", "password": "123456", "administrador": "false"}'
+
+# Executar testes novamente
+robot -d reports tests/
+```
+
+### Se o comando 'robot' não for reconhecido:
+
+```powershell
+# Ativar ambiente virtual
+& E:/programação/estagio/auto-test-web-serverest/.venv/Scripts/Activate.ps1
+
+# Verificar se (.venv) aparece no prompt, depois executar
+robot -d reports tests/
+```
+
+### Script de configuração rápida:
+
+```powershell
+# Cole este script completo no PowerShell
+cd "seu\caminho\para\auto-test-web-serverest\Caio"
+& E:/programação/estagio/auto-test-web-serverest/.venv/Scripts/Activate.ps1
+pip install -r requirements.txt
+Invoke-WebRequest -Uri "https://serverest.dev/usuarios" -Method POST -ContentType "application/json" -Body '{"nome": "Admin User", "email": "admin@serverest.dev", "password": "123456", "administrador": "true"}' | Out-Null
+Invoke-WebRequest -Uri "https://serverest.dev/usuarios" -Method POST -ContentType "application/json" -Body '{"nome": "Fulano da Silva", "email": "fulano@serverest.dev", "password": "123456", "administrador": "false"}' | Out-Null
+robot -d reports tests/
+start reports/report.html
+```
+
+## �👥 Autor
 
 **Caio Oliveira Silva Alencar**
 - Implementação completa de 7 casos de teste funcionais
 - Seguindo boas práticas do Robot Framework
 - Estrutura preparada para integração CI/CD
 - Testes validados e funcionando corretamente
+- Documentação completa com solução de problemas

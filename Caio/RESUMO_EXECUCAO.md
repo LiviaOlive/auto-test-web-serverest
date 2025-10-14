@@ -2,10 +2,12 @@
 
 ## 🎯 Resultado Final: **SUCESSO**
 
-**Data da Execução:** 13 de outubro de 2025  
+**Data da Execução:** 14 de outubro de 2025  
 **Status:** ✅ Todos os testes implementados estão funcionando  
 **Total de Testes:** 7 casos de teste + 1 suite principal = **8 testes executados**  
 **Resultado:** **8 PASSED, 0 FAILED** (100% de sucesso)
+
+> ⚠️ **IMPORTANTE:** Se os testes falharem com erro 401, siga as instruções na seção "Solução de Problemas" abaixo.
 
 ---
 
@@ -121,6 +123,107 @@ robot -d reports tests/test_carrinho.robot
 # Abrir relatório no navegador
 start reports/report.html
 ```
+
+---
+
+## 🚨 Solução de Problemas
+
+### Problema 1: Testes falhando com erro 401 (Unauthorized)
+
+**Sintomas:**
+- Erro: "Email e/ou senha inválidos"  
+- Status: 401 Unauthorized
+- Testes de login falhando
+
+**Causa:** A API ServeRest é um ambiente compartilhado que pode resetar dados periodicamente.
+
+**Solução:**
+```powershell
+# 1. Criar usuário administrador
+Invoke-WebRequest -Uri "https://serverest.dev/usuarios" -Method POST -ContentType "application/json" -Body '{"nome": "Admin User", "email": "admin@serverest.dev", "password": "123456", "administrador": "true"}'
+
+# 2. Criar usuário cliente  
+Invoke-WebRequest -Uri "https://serverest.dev/usuarios" -Method POST -ContentType "application/json" -Body '{"nome": "Fulano da Silva", "email": "fulano@serverest.dev", "password": "123456", "administrador": "false"}'
+
+# 3. Executar testes novamente
+robot -d reports tests/
+```
+
+### Problema 2: Comando 'robot' não reconhecido
+
+**Sintomas:**
+- Erro: "O termo 'robot' não é reconhecido"
+
+**Solução:**
+```powershell
+# Ativar ambiente virtual primeiro
+& E:/programação/estagio/auto-test-web-serverest/.venv/Scripts/Activate.ps1
+
+# Verificar se está ativo (deve aparecer (.venv) no prompt)
+# Depois executar os testes
+robot -d reports tests/
+```
+
+### Problema 3: Diretório não encontrado
+
+**Sintomas:**  
+- Erro: "File or directory to execute does not exist"
+
+**Solução:**
+```powershell
+# Navegar para o diretório correto
+cd "caminho\para\auto-test-web-serverest\Caio"
+
+# Verificar se está na pasta certa (deve conter pasta tests/)
+ls
+
+# Executar testes
+robot -d reports tests/
+```
+
+### Problema 4: Dependências não instaladas
+
+**Sintomas:**
+- Erros de import
+- Módulos não encontrados
+
+**Solução:**
+```powershell
+# Com ambiente virtual ativado, reinstalar dependências
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### ✅ Configuração Automática
+
+**Opção 1: Script PowerShell Executável**
+```powershell
+# Execute o script automatizado (recomendado)
+.\setup_testes.ps1
+```
+
+**Opção 2: Script Manual (cole no PowerShell)**
+
+Consulte o arquivo `SETUP_RAPIDO.md` para scripts completos que você pode copiar e colar.
+
+**Opção 3: Configuração passo-a-passo**
+```powershell
+cd "caminho\para\auto-test-web-serverest\Caio"
+& E:/programação/estagio/auto-test-web-serverest/.venv/Scripts/Activate.ps1
+pip install -r requirements.txt
+
+# Criar usuários (se necessário)
+Invoke-WebRequest -Uri "https://serverest.dev/usuarios" -Method POST -ContentType "application/json" -Body '{"nome": "Admin User", "email": "admin@serverest.dev", "password": "123456", "administrador": "true"}' | Out-Null
+Invoke-WebRequest -Uri "https://serverest.dev/usuarios" -Method POST -ContentType "application/json" -Body '{"nome": "Fulano da Silva", "email": "fulano@serverest.dev", "password": "123456", "administrador": "false"}' | Out-Null
+
+robot -d reports tests/
+start reports/report.html
+```
+
+**📂 Arquivos de Ajuda:**
+- `SETUP_RAPIDO.md` - Scripts prontos para copiar/colar
+- `setup_testes.ps1` - Script executável automatizado
+- `README.md` - Documentação completa
 
 ---
 
