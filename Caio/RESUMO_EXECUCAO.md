@@ -81,10 +81,30 @@ Caio/
 
 ## 🚀 Como Executar
 
-```powershell
-# Instalar dependências
-pip install -r requirements.txt
+### 1. Configurar Ambiente Virtual
 
+```powershell
+# Navegar para o diretório do projeto
+cd "e:\programação\estagio\auto-test-web-serverest\Caio"
+
+# Ativar o ambiente virtual (se já existir)
+& E:/programação/estagio/auto-test-web-serverest/.venv/Scripts/Activate.ps1
+
+# OU criar um novo ambiente virtual (se necessário)
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+### 2. Instalar Dependências
+
+```powershell
+# Com o ambiente virtual ativado
+pip install -r requirements.txt
+```
+
+### 3. Executar os Testes
+
+```powershell
 # Executar todos os testes
 robot -d reports tests/
 
@@ -93,6 +113,13 @@ robot -d reports tests/test_auth.robot
 robot -d reports tests/test_usuarios.robot
 robot -d reports tests/test_produtos.robot
 robot -d reports tests/test_carrinho.robot
+```
+
+### 4. Visualizar Relatórios
+
+```powershell
+# Abrir relatório no navegador
+start reports/report.html
 ```
 
 ---

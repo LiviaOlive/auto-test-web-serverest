@@ -27,9 +27,22 @@ Este projeto implementa testes automatizados para a API ServeRest utilizando Rob
 1. Python 3.8+ instalado
 2. pip (gerenciador de pacotes Python)
 
+### Configurar Ambiente Virtual
+```powershell
+# Navegar para o diretório do projeto
+cd "e:\programação\estagio\auto-test-web-serverest\Caio"
+
+# Ativar o ambiente virtual existente
+& E:/programação/estagio/auto-test-web-serverest/.venv/Scripts/Activate.ps1
+
+# OU criar novo ambiente virtual (se necessário)
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
 ### Instalação das Dependências
 ```powershell
-cd "e:\programação\estagio\auto-test-web-serverest\Caio"
+# Com o ambiente virtual ativado
 pip install -r requirements.txt
 ```
 
